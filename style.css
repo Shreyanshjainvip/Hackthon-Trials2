@@ -1,1 +1,529 @@
+/* ============================================
+   RESET & ROOT VARIABLES
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+:root {
+  --bg-dark:        #0d0d0d;
+  --bg-glass:       rgba(255, 255, 255, 0.05);
+  --bg-glass-hover: rgba(255, 255, 255, 0.10);
+  --border-glass:   rgba(255, 255, 255, 0.12);
+  --accent:         #6c63ff;
+  --accent-soft:    rgba(108, 99, 255, 0.25);
+  --text-primary:   #f0f0f0;
+  --text-muted:     #888;
+  --taskbar-h:      48px;
+  --titlebar-h:     36px;
+  --radius:         12px;
+  --radius-sm:      8px;
+  --blur:           blur(16px);
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-dark);
+  user-select: none;
+}
+
+/* ============================================
+   1. BOOT SCREEN
+   ============================================ */
+#boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  transition: opacity 0.8s ease;
+}
+
+#boot-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#boot-logo {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+#boot-loader {
+  width: 200px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+#boot-loader::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 99px;
+  animation: bootLoad 2.5s ease forwards;
+}
+
+@keyframes bootLoad {
+  0%   { width: 0%; }
+  60%  { width: 70%; }
+  100% { width: 100%; }
+}
+
+/* ============================================
+   2. DESKTOP
+   ============================================ */
+#desktop {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(108,99,255,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,200,255,0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #0d0d0d 0%, #111827 100%);
+  overflow: hidden;
+}
+
+/* ============================================
+   2b. DESKTOP ICONS
+   ============================================ */
+#desktop-icons {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+}
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 72px;
+  padding: 10px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.icon:hover {
+  background: var(--bg-glass-hover);
+}
+
+.icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.icon span {
+  font-size: 12px;
+  color: var(--text-primary);
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  word-break: break-word;
+}
+
+/* ============================================
+   3. WINDOWS
+   ============================================ */
+#windows-area {
+  position: absolute;
+  inset: 0;
+  bottom: var(--taskbar-h);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.window {
+  position: absolute;
+  min-width: 300px;
+  min-height: 200px;
+  background: rgba(20, 20, 30, 0.75);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  pointer-events: all;
+  overflow: hidden;
+  resize: both;
+  transition: box-shadow 0.2s ease;
+}
+
+.window:focus-within,
+.window.active {
+  box-shadow:
+    0 32px 80px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(108,99,255,0.4);
+}
+
+/* Hidden state */
+.window.hidden {
+  display: none;
+}
+
+/* Maximized state */
+.window.maximized {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: calc(100vh - var(--taskbar-h)) !important;
+  border-radius: 0;
+  resize: none;
+}
+
+/* ── Title Bar ── */
+.title-bar {
+  height: var(--titlebar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 14px;
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--border-glass);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.title-bar:active {
+  cursor: grabbing;
+}
+
+.window-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Window Control Buttons ── */
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.window-controls button {
+  width: 28px;
+  height: 22px;
+  border: none;
+  border-radius: 5px;
+  background: var(--bg-glass);
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.window-controls .btn-minimize:hover { background: rgba(255,200,0,0.25); color: #ffc800; }
+.window-controls .btn-maximize:hover { background: rgba(0,200,80,0.25);  color: #00c850; }
+.window-controls .btn-close:hover    { background: rgba(255,60,60,0.25);  color: #ff3c3c; }
+
+/* ── Window Content ── */
+.window-content {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar inside windows */
+.window-content::-webkit-scrollbar { width: 6px; }
+.window-content::-webkit-scrollbar-track { background: transparent; }
+.window-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
+
+/* ── Notepad Textarea ── */
+.window-content textarea {
+  width: 100%;
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: none;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+}
+
+/* ── Calculator ── */
+#calc-display {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 22px;
+  text-align: right;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  outline: none;
+  font-family: monospace;
+}
+
+#calc-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+#calc-buttons button {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#calc-buttons button:hover {
+  background: var(--bg-glass-hover);
+}
+
+#calc-buttons button.btn-op {
+  background: var(--accent-soft);
+  color: #a89dff;
+}
+
+#calc-buttons button.btn-equal {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+#calc-buttons button.btn-equal:hover {
+  background: #7c73ff;
+}
+
+/* ============================================
+   4. TASKBAR
+   ============================================ */
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--taskbar-h);
+  background: rgba(10, 10, 18, 0.85);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-top: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+  z-index: 500;
+}
+
+/* Start Button */
+#start-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass);
+  background: var(--accent-soft);
+  color: #c0b8ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+#start-btn:hover {
+  background: rgba(108,99,255,0.4);
+}
+
+/* Taskbar Running Apps */
+#taskbar-apps {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.taskbar-app-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.taskbar-app-btn:hover,
+.taskbar-app-btn.active {
+  background: var(--bg-glass-hover);
+  border-color: rgba(108,99,255,0.4);
+}
+
+/* System Tray */
+#system-tray {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+#clock {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   5. START MENU
+   ============================================ */
+#start-menu {
+  position: fixed;
+  bottom: calc(var(--taskbar-h) + 8px);
+  left: 12px;
+  width: 260px;
+  background: rgba(15, 15, 25, 0.90);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius);
+  padding: 12px;
+  z-index: 600;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  animation: fadeUp 0.2s ease;
+}
+
+#start-menu.hidden {
+  display: none;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#search-bar {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-glass);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+#search-bar::placeholder {
+  color: var(--text-muted);
+}
+
+#app-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#app-list li {
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+#app-list li:hover {
+  background: var(--bg-glass-hover);
+}
+
+/* ============================================
+   6. CONTEXT MENU
+   ============================================ */
+#context-menu {
+  position: fixed;
+  background: rgba(15, 15, 25, 0.92);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  z-index: 700;
+  min-width: 180px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  animation: fadeIn 0.15s ease;
+}
+
+#context-menu.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+#context-menu ul {
+  list-style: none;
+}
+
+#context-menu ul li {
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+  transition: background 0.15s;
+}
+
+#context-menu ul li:hover {
+  background: var(--bg-glass-hover);
+}
+
+/* ============================================
+   UTILITY
+   ============================================ */
+.hidden {
+  display: none !important;
+}
