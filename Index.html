@@ -8,23 +8,19 @@
 </head>
 <body>
 
-  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-  <!-- 1. BOOT SCREEN (shows on page load)  -->
-  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  
   <div id="boot-screen">
     <div id="boot-logo">WebOS</div>
     <div id="boot-loader"></div>
   </div>
 
-  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-  <!-- 2. DESKTOP (main OS screen)          -->
-  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  
   <div id="desktop">
 
-    <!-- 2a. Wallpaper / Background -->
+    
     <div id="wallpaper"></div>
 
-    <!-- 2b. Desktop Icons -->
+    
     <div id="desktop-icons">
       <div class="icon" data-app="browser">
         <img src="icons/browser.png" alt="Browser" />
@@ -44,15 +40,13 @@
       </div>
     </div>
 
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <!-- 3. WINDOWS AREA (apps open here)    -->
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    
     <div id="windows-area">
 
-      <!-- Each app = one window -->
+      
       <div class="window" id="window-notepad">
 
-        <!-- 3a. Title Bar -->
+        
         <div class="title-bar">
           <span class="window-title">📝 Notepad</span>
           <div class="window-controls">
@@ -62,14 +56,14 @@
           </div>
         </div>
 
-        <!-- 3b. Window Content -->
+        
         <div class="window-content">
           <textarea placeholder="Start typing..."></textarea>
         </div>
 
       </div>
 
-      <!-- Calculator Window -->
+      
       <div class="window" id="window-calculator">
         <div class="title-bar">
           <span class="window-title">🔢 Calculator</span>
@@ -82,38 +76,34 @@
         <div class="window-content">
           <input type="text" id="calc-display" readonly />
           <div id="calc-buttons">
-            <!-- Buttons will go here -->
+            
           </div>
         </div>
       </div>
 
-    </div><!-- end windows-area -->
+    </div>
 
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <!-- 4. TASKBAR (bottom bar)             -->
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+    
     <div id="taskbar">
 
-      <!-- Start / App Menu Button -->
+      
       <button id="start-btn">⊞ Start</button>
 
-      <!-- Running Apps shown here -->
+      
       <div id="taskbar-apps">
-        <!-- JS will add app buttons here dynamically -->
+        
       </div>
 
-      <!-- System Tray (right side) -->
+     
       <div id="system-tray">
         <span id="battery">🔋 100%</span>
         <span id="wifi">📶</span>
         <span id="clock">00:00</span>
       </div>
 
-    </div><!-- end taskbar -->
+    </div>
 
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <!-- 5. START MENU (opens on click)      -->
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+
     <div id="start-menu" class="hidden">
       <input type="text" id="search-bar" placeholder="Search apps..." />
       <ul id="app-list">
@@ -124,9 +114,7 @@
       </ul>
     </div>
 
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-    <!-- 6. CONTEXT MENU (right-click menu)  -->
-    <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+ 
     <div id="context-menu" class="hidden">
       <ul>
         <li>Change Wallpaper</li>
@@ -135,7 +123,7 @@
       </ul>
     </div>
 
-  </div><!-- end desktop -->
+  </div>
 
   <script src="script.js"></script>
 </body>
